@@ -1,8 +1,14 @@
 class Solution:
     def reverseSubmatrix(self, grid, x, y, k):
-        for i in range(k // 2):
-            for j in range(k):
-                grid[x + i][y + j], grid[x + k - 1 - i][y + j] = \
-                grid[x + k - 1 - i][y + j], grid[x + i][y + j]
+        # top and bottom pointers within submatrix
+        top = x
+        bottom = x + k - 1
+        
+        while top < bottom:
+            for j in range(y, y + k):
+                grid[top][j], grid[bottom][j] = grid[bottom][j], grid[top][j]
+            
+            top += 1
+            bottom -= 1
         
         return grid
