@@ -1,11 +1,12 @@
 class Solution:
     def canConstruct(self, ransomNote: str, magazine: str) -> bool:
-        count={}
+        count = [0] * 26
         for c in magazine:
-            count[c]=count.get(c,0)+1
+            count[ord(c) - ord('a')] += 1
         for c in ransomNote:
-            if c not in count or count[c]==0:
+            idx = ord(c) - ord('a')
+            if count[idx] == 0:
                 return False
-            count[c]-=1
+            count[idx] -= 1
         return True
         
