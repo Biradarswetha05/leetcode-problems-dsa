@@ -1,0 +1,8 @@
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        n=len(s)
+        i=0
+        for ch in t:
+            if i<n and s[i]==ch:
+                i+=1
+        return i==n
