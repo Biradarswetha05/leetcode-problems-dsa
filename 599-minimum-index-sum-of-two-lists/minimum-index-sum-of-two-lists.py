@@ -1,0 +1,17 @@
+class Solution:
+    def findRestaurant(self, list1: List[str], list2: List[str]) -> List[str]:
+        pos = {v: i for i, v in enumerate(list1)}
+        res = []
+        min_sum = float('inf')
+        
+        for j, v in enumerate(list2):
+            if v in pos:
+                s = j + pos[v]
+                if s < min_sum:
+                    min_sum = s
+                    res = [v]
+                elif s == min_sum:
+                    res.append(v)
+        
+        return res
+        
