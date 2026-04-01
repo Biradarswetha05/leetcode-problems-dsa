@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<int> survivedRobotsHealths(vector<int>& positions, vector<int>& healths, string directions) {
+        int n = positions.size();
+        
+        // Sort indices by position to process collisions in order
+        vector<int> indices(n);
+        iota(indices.begin(), indices.end(), 0);
+        sort(indices.begin(), indices.end(), [&](int a, int b) {
+            return positions[a] < positions[b];
+        });
+        
+        stack<int> st;  // stores original indices of surviving 'R' robots
+        
+        for (int i : indices) {
+            if (directions[i] == 'R') {
+                st.push(i);
+            } else {  // 'L' robot — fight all 'R' robots to its left
+                while (!st.empty() && healths[i] > 0) {
+                    int top = st.top();
+                    
+                    if (healths[top] > healths[i]) {
+                        // R wins, L is destroyed
+                        healths[top] -= 1;
+                        healths[i] = 0;
+                    } else if (healths[top] < healths[i]) {
+                        // L wins, R is destroyed
+                        healths[i] -= 1;
+                        healths[top] = 0;
+                        st.pop();
+                    } else {
+                        // Both destroyed
+                        healths[top] = 0;
+                        healths[i] = 0;
+                        st.pop();
+                    }
+                }
+            }
+        }
+        
+        // Collect survivors in original input order
+        vector<int> result;
+        for (int i = 0; i < n; i++) {
+            if (healths[i] > 0)
+                result.push_back(healths[i]);
+        }
+        return result;
+    }
+};
