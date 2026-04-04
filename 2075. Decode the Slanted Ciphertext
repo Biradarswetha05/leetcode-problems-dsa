@@ -1,0 +1,22 @@
+class Solution:
+    def decodeCiphertext(self, encodedText: str, rows: int) -> str:
+        if rows == 1:
+            return encodedText
+    
+        n = len(encodedText)
+        cols = n // rows
+        matrix = []
+        index = 0
+        for i in range(rows):
+            matrix.append(list(encodedText[index:index + cols]))
+            index += cols
+        result = []
+    
+        for col in range(cols):
+            i, j = 0, col
+            while i < rows and j < cols:
+                result.append(matrix[i][j])
+                i += 1
+                j += 1
+        return "".join(result).rstrip()
+        
