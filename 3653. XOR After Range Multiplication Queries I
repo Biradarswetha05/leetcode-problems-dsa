@@ -1,0 +1,42 @@
+class Solution:
+    def xorAfterQueries(self, nums: List[int], queries: List[List[int]]) -> int:
+        MOD = 10**9 + 7
+        n = len(nums)
+        B = int(n**0.5) + 1
+
+        # lazy[k][r] → multiplier for indices where i % k == r
+        lazy = [{} for _ in range(B)]
+
+        # Direct updates for large k
+        for l, r, k, v in queries:
+            if k >= B:
+                i = l
+                while i <= r:
+                    nums[i] = (nums[i] * v) % MOD
+                    i += k
+            else:
+                rmd = l % k
+                if rmd not in lazy[k]:
+                    lazy[k][rmd] = []
+                lazy[k][rmd].append((l, r, v))
+
+        # Apply lazy updates
+        for i in range(n):
+            val = nums[i]
+
+            for k in range(1, B):
+                rmd = i % k
+                if rmd in lazy[k]:
+                    for l, r, v in lazy[k][rmd]:
+                        if l <= i <= r:
+                            val = (val * v) % MOD
+
+            nums[i] = val
+
+        # Compute XOR
+        res = 0
+        for x in nums:
+            res ^= x
+
+        return res
+       
