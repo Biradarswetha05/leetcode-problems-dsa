@@ -1,0 +1,84 @@
+class Solution:
+    def canPartitionGrid(self, grid: List[List[int]]) -> bool:
+        m,n=len(grid),len(grid[0])
+        total=sum(sum(r) for r in grid)
+
+        top,bot={},{}
+        for r in grid:
+            for v in r:
+                bot[v]=bot.get(v,0)+1
+
+        s=0
+        for i in range(m-1):
+            for v in grid[i]:
+                top[v]=top.get(v,0)+1
+                bot[v]-=1
+                if bot[v]==0: del bot[v]
+            s+=sum(grid[i])
+            t=total-s
+            if s==t: return True
+            d=abs(s-t)
+
+            if s>t:
+                h,w=i+1,n
+                if d in top:
+                    if h>1 and w>1: return True
+                    if h==1:
+                        row=grid[0]
+                        for j in range(w):
+                            if row[j]==d and (j==0 or j==w-1): return True
+                    if w==1:
+                        for x in range(h):
+                            if grid[x][0]==d and (x==0 or x==h-1): return True
+            else:
+                h,w=m-i-1,n
+                if d in bot:
+                    if h>1 and w>1: return True
+                    if h==1:
+                        row=grid[i+1]
+                        for j in range(w):
+                            if row[j]==d and (j==0 or j==w-1): return True
+                    if w==1:
+                        for x in range(h):
+                            if grid[i+1+x][0]==d and (x==0 or x==h-1): return True
+
+        left,right={},{}
+        for j in range(n):
+            for i in range(m):
+                v=grid[i][j]
+                right[v]=right.get(v,0)+1
+
+        s=0
+        for j in range(n-1):
+            for i in range(m):
+                v=grid[i][j]
+                left[v]=left.get(v,0)+1
+                right[v]-=1
+                if right[v]==0: del right[v]
+            s+=sum(grid[i][j] for i in range(m))
+            t=total-s
+            if s==t: return True
+            d=abs(s-t)
+
+            if s>t:
+                h,w=m,j+1
+                if d in left:
+                    if h>1 and w>1: return True
+                    if h==1:
+                        for y in range(w):
+                            if grid[0][y]==d and (y==0 or y==w-1): return True
+                    if w==1:
+                        for x in range(h):
+                            if grid[x][0]==d and (x==0 or x==h-1): return True
+            else:
+                h,w=m,n-j-1
+                if d in right:
+                    if h>1 and w>1: return True
+                    if h==1:
+                        for y in range(w):
+                            if grid[0][j+1+y]==d and (y==0 or y==w-1): return True
+                    if w==1:
+                        for x in range(h):
+                            if grid[x][j+1]==d and (x==0 or x==h-1): return True
+
+        return False
