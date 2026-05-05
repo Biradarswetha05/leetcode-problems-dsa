@@ -1,0 +1,13 @@
+class Solution:
+    def uniqueOccurrences(self, arr):
+        freq = {}
+
+        # Count frequency
+        for num in arr:
+            freq[num] = freq.get(num, 0) + 1
+
+        # Get all frequencies
+        values = list(freq.values())
+
+        # Check uniqueness
+        return len(values) == len(set(values))
